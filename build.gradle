@@ -1,0 +1,34 @@
+repositories {
+    mavenCentral()
+    maven {
+        url "https://dist.xebialabs.com/public/maven2"
+    }
+}
+
+version="0.1"
+
+apply plugin: "java"
+
+configurations {
+    packaging {}
+    compile {
+        extendsFrom packaging
+    }
+}
+
+dependencies {
+    compile "com.xebialabs.deployit:udm-plugin-api:2017.6.0"
+    compile "com.xebialabs.overthere:overthere:5.0.2"
+    packaging "org.yaml:snakeyaml:1.18"
+    packaging "com.google.code.gson:gson:2.8.2"
+}
+
+jar {
+    from configurations.packaging.collect {
+        zipTree(it).matching {
+            exclude {
+                it.path.contains("META-INF")
+            }
+        }
+    }
+}
